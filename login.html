@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FranceCraft — Connexion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #090b10;
+  --card: #111620;
+  --card2: #141b26;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8eaf0;
+  --muted: #6b7280;
+  --accent: #3b82f6;
+  --accent2: #60a5fa;
+  --dream: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --input-bg: rgba(255,255,255,0.04);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:'DM Mono',monospace;font-weight:300;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;cursor:none}
+
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.025;pointer-events:none;z-index:1000}
+
+/* CURSOR */
+.cursor{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform 0.1s,background 0.2s;mix-blend-mode:screen}
+.cursor-ring{position:fixed;width:36px;height:36px;border:1px solid rgba(59,130,246,0.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all 0.15s ease;mix-blend-mode:screen}
+.cursor.click{transform:translate(-50%,-50%) scale(2);background:var(--dream)}
+.cursor-ring.click{transform:translate(-50%,-50%) scale(0.6);border-color:var(--dream)}
+
+/* GRID BG */
+.grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(59,130,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.03) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 70% 70% at 50% 50%,black 30%,transparent 100%);pointer-events:none;z-index:0}
+
+/* GLOW */
+.glow-left{position:fixed;width:500px;height:500px;background:radial-gradient(circle,rgba(59,130,246,0.1) 0%,transparent 70%);top:20%;left:-100px;pointer-events:none;z-index:0;animation:glowFloat 8s ease-in-out infinite}
+.glow-right{position:fixed;width:400px;height:400px;background:radial-gradient(circle,rgba(245,158,11,0.07) 0%,transparent 70%);bottom:10%;right:-80px;pointer-events:none;z-index:0;animation:glowFloat 10s ease-in-out infinite reverse}
+@keyframes glowFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-30px)}}
+
+/* NAV */
+nav{position:relative;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:20px 48px;border-bottom:1px solid var(--border)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;letter-spacing:-0.02em;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo-badge{width:28px;height:28px;background:linear-gradient(135deg,var(--accent),#1d4ed8);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.nav-back{color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;transition:color 0.2s}
+.nav-back:hover{color:var(--text)}
+.nav-back svg{transition:transform 0.2s}
+.nav-back:hover svg{transform:translateX(-3px)}
+
+/* MAIN */
+main{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 24px;position:relative;z-index:1}
+
+/* AUTH CARD */
+.auth-wrap{width:100%;max-width:440px;animation:fadeUp 0.6s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.auth-header{text-align:center;margin-bottom:40px}
+.auth-eyebrow{display:inline-flex;align-items:center;gap:8px;padding:5px 14px;border:1px solid var(--border);border-radius:100px;background:rgba(59,130,246,0.06);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--accent2);margin-bottom:20px}
+.auth-title{font-family:'Syne',sans-serif;font-weight:800;font-size:32px;letter-spacing:-0.02em;line-height:1.1;color:var(--text);margin-bottom:8px}
+.auth-title em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--muted)}
+.auth-sub{font-size:13px;color:var(--muted);line-height:1.6}
+
+/* TABS */
+.auth-tabs{display:flex;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:28px}
+.tab-btn{flex:1;padding:10px;background:transparent;border:none;border-radius:9px;color:var(--muted);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;cursor:none;transition:all 0.2s}
+.tab-btn.active{background:var(--card2);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+
+/* DISCORD BTN */
+.btn-discord{width:100%;padding:14px;background:rgba(88,101,242,0.12);border:1px solid rgba(88,101,242,0.25);border-radius:10px;color:#7289da;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:0.06em;text-transform:uppercase;cursor:none;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:12px;text-decoration:none;margin-bottom:20px;font-weight:500}
+.btn-discord:hover{background:rgba(88,101,242,0.2);box-shadow:0 4px 20px rgba(88,101,242,0.2);transform:translateY(-1px)}
+
+/* SEPARATOR */
+.sep{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+.sep-line{flex:1;height:1px;background:var(--border)}
+.sep-text{font-size:11px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;white-space:nowrap}
+
+/* FORM */
+.auth-form{display:flex;flex-direction:column;gap:16px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.field input{width:100%;padding:13px 16px;background:var(--input-bg);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Mono',monospace;font-size:13px;transition:all 0.2s;outline:none;cursor:text}
+.field input::placeholder{color:var(--muted);opacity:0.5}
+.field input:focus{border-color:rgba(59,130,246,0.4);background:rgba(59,130,246,0.04);box-shadow:0 0 0 3px rgba(59,130,246,0.08)}
+.field input.error{border-color:rgba(239,68,68,0.4);background:rgba(239,68,68,0.04)}
+.field-hint{font-size:11px;color:var(--muted);line-height:1.5}
+.field-error{font-size:11px;color:var(--red);display:none}
+.field input.error ~ .field-error{display:block}
+
+/* PASSWORD TOGGLE */
+.field-pw{position:relative}
+.field-pw input{padding-right:44px}
+.pw-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:none;padding:4px;transition:color 0.2s;display:flex;align-items:center}
+.pw-toggle:hover{color:var(--text)}
+
+/* FORGOT */
+.forgot{text-align:right;margin-top:-8px}
+.forgot a{font-size:11px;color:var(--muted);text-decoration:none;letter-spacing:0.06em;transition:color 0.2s}
+.forgot a:hover{color:var(--accent2)}
+
+/* SUBMIT */
+.btn-submit{width:100%;padding:14px;background:var(--accent);border:none;border-radius:10px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;letter-spacing:0.04em;text-transform:uppercase;cursor:none;transition:all 0.25s;position:relative;overflow:hidden;margin-top:4px}
+.btn-submit::before{content:'';position:absolute;inset:0;background:linear-gradient(to right,transparent,rgba(255,255,255,0.1),transparent);transform:translateX(-100%);transition:transform 0.5s}
+.btn-submit:hover::before{transform:translateX(100%)}
+.btn-submit:hover{background:var(--accent2);box-shadow:0 8px 24px rgba(59,130,246,0.35);transform:translateY(-1px)}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* TERMS */
+.terms{font-size:11px;color:var(--muted);text-align:center;line-height:1.6;margin-top:8px}
+.terms a{color:var(--muted);text-decoration:underline;text-underline-offset:3px;transition:color 0.2s}
+.terms a:hover{color:var(--text)}
+
+/* CHECKBOX */
+.check-row{display:flex;align-items:flex-start;gap:10px}
+.check-row input[type=checkbox]{width:16px;height:16px;accent-color:var(--accent);flex-shrink:0;margin-top:2px;cursor:none}
+.check-row label{font-size:12px;color:var(--muted);line-height:1.5;cursor:none}
+.check-row a{color:var(--accent2);text-decoration:none}
+.check-row a:hover{text-decoration:underline}
+
+/* SUCCESS / ERROR ALERTS */
+.alert{padding:12px 16px;border-radius:8px;font-size:12px;line-height:1.5;margin-bottom:16px;display:none}
+.alert.show{display:flex;align-items:flex-start;gap:10px}
+.alert.success{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);color:var(--green)}
+.alert.error{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);color:var(--red)}
+.alert-icon{flex-shrink:0;margin-top:1px}
+
+/* FOOTER */
+footer{position:relative;z-index:1;padding:24px 48px;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:11px;color:var(--muted);opacity:0.4}
+.footer-links{display:flex;gap:24px}
+.footer-links a{font-size:11px;color:var(--muted);text-decoration:none;opacity:0.4;transition:opacity 0.2s;letter-spacing:0.06em;text-transform:uppercase}
+.footer-links a:hover{opacity:0.8}
+
+/* PANELS */
+.panel{display:none}
+.panel.active{display:block}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  nav{padding:16px 20px}
+  main{padding:40px 16px}
+  footer{padding:20px}
+  .footer-links{display:none}
+  body{cursor:auto}
+  .cursor,.cursor-ring{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div>
+<div class="glow-left"></div>
+<div class="glow-right"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-badge">🌐</div>
+    FranceCraft
+  </a>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Retour
+  </a>
+</nav>
+
+<!-- MAIN -->
+<main>
+  <div class="auth-wrap">
+    <div class="auth-header">
+      <div class="auth-eyebrow">🌐 FranceCraft</div>
+      <h1 class="auth-title" id="auth-title">Bienvenue<br><em>dans la ville.</em></h1>
+      <p class="auth-sub" id="auth-sub">Connectez-vous pour accéder à votre espace joueur.</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="auth-tabs">
+      <button class="tab-btn active" id="tab-login" onclick="switchTab('login')">Connexion</button>
+      <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Créer un compte</button>
+    </div>
+
+    <!-- DISCORD -->
+    <a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener" class="btn-discord">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+      Continuer avec Discord
+    </a>
+
+    <div class="sep">
+      <div class="sep-line"></div>
+      <span class="sep-text">ou par email</span>
+      <div class="sep-line"></div>
+    </div>
+
+    <!-- ALERT -->
+    <div class="alert success" id="alert-success">
+      <span class="alert-icon">✓</span>
+      <span id="alert-success-msg">Compte créé avec succès !</span>
+    </div>
+    <div class="alert error" id="alert-error">
+      <span class="alert-icon">✕</span>
+      <span id="alert-error-msg">Une erreur est survenue.</span>
+    </div>
+
+    <!-- LOGIN PANEL -->
+    <div class="panel active" id="panel-login">
+      <div class="auth-form">
+        <div class="field">
+          <label>Adresse email</label>
+          <input type="email" id="login-email" placeholder="toi@example.com" autocomplete="email">
+          <span class="field-error">Email invalide</span>
+        </div>
+        <div class="field">
+          <label>Mot de passe</label>
+          <div class="field-pw">
+            <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
+            <button class="pw-toggle" onclick="togglePw('login-password',this)" type="button" tabindex="-1">
+              <svg id="eye-login" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="field-error">Mot de passe incorrect</span>
+        </div>
+        <div class="forgot"><a href="#">Mot de passe oublié ?</a></div>
+        <button class="btn-submit" id="btn-login" onclick="handleLogin()">Se connecter</button>
+        <p class="terms">
+          En vous connectant, vous acceptez nos <a href="#">CGU</a> et notre <a href="#">politique de confidentialité</a>.
+        </p>
+      </div>
+    </div>
+
+    <!-- REGISTER PANEL -->
+    <div class="panel" id="panel-register">
+      <div class="auth-form">
+        <div class="field">
+          <label>Pseudo Minecraft</label>
+          <input type="text" id="reg-username" placeholder="VotrePseudo" autocomplete="username">
+          <span class="field-hint">Votre pseudo exact sur Minecraft (sensible à la casse).</span>
+          <span class="field-error">Pseudo invalide</span>
+        </div>
+        <div class="field">
+          <label>Adresse email</label>
+          <input type="email" id="reg-email" placeholder="toi@example.com" autocomplete="email">
+          <span class="field-error">Email invalide</span>
+        </div>
+        <div class="field">
+          <label>Mot de passe</label>
+          <div class="field-pw">
+            <input type="password" id="reg-password" placeholder="Min. 8 caractères" autocomplete="new-password">
+            <button class="pw-toggle" onclick="togglePw('reg-password',this)" type="button" tabindex="-1">
+              <svg id="eye-reg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+          <span class="field-hint">Au moins 8 caractères, une majuscule et un chiffre.</span>
+          <span class="field-error">Mot de passe trop faible</span>
+        </div>
+        <div class="field">
+          <label>Confirmer le mot de passe</label>
+          <div class="field-pw">
+            <input type="password" id="reg-confirm" placeholder="••••••••" autocomplete="new-password">
+          </div>
+          <span class="field-error" id="confirm-error">Les mots de passe ne correspondent pas</span>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="reg-terms">
+          <label for="reg-terms">J'ai lu et j'accepte les <a href="#">CGU</a> et la <a href="#">politique de confidentialité</a> de FranceCraft.</label>
+        </div>
+        <button class="btn-submit" id="btn-register" onclick="handleRegister()">Créer mon compte</button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">© 2026 FranceCraft</div>
+  <div class="footer-links">
+    <a href="#">CGU</a>
+    <a href="#">Confidentialité</a>
+    <a href="https://discord.gg/MHw87NrHxu" target="_blank">Support</a>
+  </div>
+</footer>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+});
+function animRing(){
+  rx+=(mx-rx)*0.12; ry+=(my-ry)*0.12;
+  ring.style.left=rx+'px'; ring.style.top=ry+'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.addEventListener('mousedown',()=>{cursor.classList.add('click');ring.classList.add('click')});
+document.addEventListener('mouseup',()=>{cursor.classList.remove('click');ring.classList.remove('click')});
+
+// ── TABS ──
+function switchTab(tab) {
+  const isLogin = tab === 'login';
+  document.getElementById('tab-login').classList.toggle('active', isLogin);
+  document.getElementById('tab-register').classList.toggle('active', !isLogin);
+  document.getElementById('panel-login').classList.toggle('active', isLogin);
+  document.getElementById('panel-register').classList.toggle('active', !isLogin);
+  document.getElementById('auth-title').innerHTML = isLogin
+    ? 'Bienvenue<br><em>dans la ville.</em>'
+    : 'Rejoindre<br><em>FranceCraft.</em>';
+  document.getElementById('auth-sub').textContent = isLogin
+    ? 'Connectez-vous pour accéder à votre espace joueur.'
+    : 'Créez votre compte et rejoignez la communauté.';
+  hideAlerts();
+}
+
+// ── PASSWORD TOGGLE ──
+function togglePw(id, btn) {
+  const input = document.getElementById(id);
+  const isHidden = input.type === 'password';
+  input.type = isHidden ? 'text' : 'password';
+  btn.querySelector('svg').innerHTML = isHidden
+    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+}
+
+// ── ALERTS ──
+function showSuccess(msg) {
+  document.getElementById('alert-success-msg').textContent = msg;
+  document.getElementById('alert-success').classList.add('show');
+  document.getElementById('alert-error').classList.remove('show');
+}
+function showError(msg) {
+  document.getElementById('alert-error-msg').textContent = msg;
+  document.getElementById('alert-error').classList.add('show');
+  document.getElementById('alert-success').classList.remove('show');
+}
+function hideAlerts() {
+  document.getElementById('alert-success').classList.remove('show');
+  document.getElementById('alert-error').classList.remove('show');
+}
+
+// ── LOGIN (frontend only — à brancher au backend) ──
+function handleLogin() {
+  hideAlerts();
+  const email = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-password').value;
+  if (!email || !email.includes('@')) {
+    document.getElementById('login-email').classList.add('error');
+    return;
+  }
+  document.getElementById('login-email').classList.remove('error');
+  if (password.length < 1) {
+    document.getElementById('login-password').classList.add('error');
+    return;
+  }
+  document.getElementById('login-password').classList.remove('error');
+  // → ICI : appel API backend (Supabase, etc.)
+  showError('Connexion impossible — le backend n\'est pas encore configuré. Rejoins le Discord en attendant !');
+}
+
+// ── REGISTER (frontend only — à brancher au backend) ──
+function handleRegister() {
+  hideAlerts();
+  const username = document.getElementById('reg-username').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value;
+  const confirm = document.getElementById('reg-confirm').value;
+  const terms = document.getElementById('reg-terms').checked;
+  let valid = true;
+
+  if (!username || username.length < 3) {
+    document.getElementById('reg-username').classList.add('error'); valid=false;
+  } else document.getElementById('reg-username').classList.remove('error');
+
+  if (!email || !email.includes('@')) {
+    document.getElementById('reg-email').classList.add('error'); valid=false;
+  } else document.getElementById('reg-email').classList.remove('error');
+
+  const pwStrong = /^(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
+  if (!pwStrong) {
+    document.getElementById('reg-password').classList.add('error'); valid=false;
+  } else document.getElementById('reg-password').classList.remove('error');
+
+  if (password !== confirm) {
+    document.getElementById('reg-confirm').classList.add('error');
+    document.getElementById('confirm-error').style.display = 'block';
+    valid=false;
+  } else {
+    document.getElementById('reg-confirm').classList.remove('error');
+    document.getElementById('confirm-error').style.display = 'none';
+  }
+
+  if (!terms) {
+    showError('Vous devez accepter les CGU pour créer un compte.');
+    return;
+  }
+
+  if (!valid) return;
+
+  // → ICI : appel API backend (Supabase, etc.)
+  showError('Inscription impossible — le backend n\'est pas encore configuré. Rejoins le Discord en attendant !');
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (document.getElementById('panel-login').classList.contains('active')) handleLogin();
+  else handleRegister();
+});
+</script>
+</body>
+</html>
