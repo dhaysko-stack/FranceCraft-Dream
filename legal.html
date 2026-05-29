@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FranceCraft — Mentions légales & CGU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#090b10;--card:#111620;--border:rgba(255,255,255,0.07);
+  --text:#e8eaf0;--muted:#6b7280;--accent:#3b82f6;--accent2:#60a5fa;--dream:#f59e0b;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--text);font-family:'DM Mono',monospace;font-weight:300;line-height:1.6}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");opacity:0.025;pointer-events:none;z-index:1000}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:18px 48px;border-bottom:1px solid var(--border);background:rgba(9,11,16,0.9);backdrop-filter:blur(16px)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo-badge{width:28px;height:28px;background:linear-gradient(135deg,var(--accent),#1d4ed8);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px}
+.nav-back{color:var(--muted);text-decoration:none;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px;transition:color 0.2s}
+.nav-back:hover{color:var(--text)}
+
+/* LAYOUT */
+.page-wrap{display:grid;grid-template-columns:240px 1fr;gap:0;max-width:1100px;margin:0 auto;padding:60px 48px;min-height:calc(100vh - 65px)}
+
+/* SIDEBAR */
+.sidebar{position:sticky;top:90px;height:fit-content;padding-right:40px;border-right:1px solid var(--border)}
+.sidebar-title{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.sidebar-title::before{content:'';width:16px;height:1px;background:var(--accent)}
+.sidebar-nav{display:flex;flex-direction:column;gap:2px}
+.sidebar-nav a{padding:8px 12px;color:var(--muted);text-decoration:none;font-size:12px;border-radius:6px;transition:all 0.2s;letter-spacing:0.04em;border-left:2px solid transparent}
+.sidebar-nav a:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.sidebar-nav a.active{color:var(--accent2);border-left-color:var(--accent);background:rgba(59,130,246,0.06)}
+.sidebar-update{margin-top:32px;padding:12px;background:var(--card);border:1px solid var(--border);border-radius:8px;font-size:11px;color:var(--muted);line-height:1.6}
+.sidebar-update strong{color:var(--text);display:block;margin-bottom:4px}
+
+/* CONTENT */
+.content{padding-left:60px}
+.content-header{margin-bottom:60px;padding-bottom:40px;border-bottom:1px solid var(--border)}
+.content-eyebrow{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent2);display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.content-eyebrow::before{content:'';width:20px;height:1px;background:var(--accent)}
+.content-title{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,4vw,48px);line-height:1.05;letter-spacing:-0.02em;color:var(--text);margin-bottom:12px}
+.content-title em{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;color:var(--muted)}
+.content-intro{font-size:14px;color:var(--muted);max-width:540px;line-height:1.8}
+
+/* SECTIONS */
+.legal-section{margin-bottom:60px;scroll-margin-top:100px}
+.legal-section:last-child{margin-bottom:0}
+.legal-section-tag{font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--accent2);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.legal-section-tag::before{content:'';width:14px;height:1px;background:var(--accent)}
+.legal-h2{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--text);margin-bottom:20px;letter-spacing:-0.01em}
+.legal-h3{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--text);margin:24px 0 10px;letter-spacing:-0.01em}
+.legal-p{font-size:13px;color:var(--muted);line-height:1.9;margin-bottom:14px}
+.legal-p strong{color:var(--text)}
+.legal-ul{list-style:none;display:flex;flex-direction:column;gap:8px;margin-bottom:16px;padding-left:4px}
+.legal-ul li{font-size:13px;color:var(--muted);line-height:1.7;display:flex;align-items:flex-start;gap:10px}
+.legal-ul li::before{content:'→';color:var(--accent);flex-shrink:0;margin-top:1px}
+.legal-box{padding:20px 24px;background:var(--card);border:1px solid var(--border);border-radius:10px;margin:20px 0;font-size:13px;color:var(--muted);line-height:1.8}
+.legal-box strong{color:var(--text);display:block;margin-bottom:8px}
+.legal-box.warn{border-color:rgba(245,158,11,0.2);background:rgba(245,158,11,0.04)}
+.legal-box.warn strong{color:var(--dream)}
+.legal-divider{height:1px;background:var(--border);margin:48px 0}
+
+/* CONTACT BOX */
+.contact-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;margin-top:40px}
+.contact-card-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;color:var(--text);margin-bottom:12px}
+.contact-card p{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px}
+.contact-discord{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(88,101,242,0.1);border:1px solid rgba(88,101,242,0.25);border-radius:8px;color:#7289da;text-decoration:none;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.2s}
+.contact-discord:hover{background:rgba(88,101,242,0.18);transform:translateY(-1px)}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:28px 48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-copy{font-size:11px;color:var(--muted);opacity:0.4}
+.footer-links{display:flex;gap:20px}
+.footer-links a{font-size:11px;color:var(--muted);text-decoration:none;opacity:0.4;transition:opacity 0.2s;letter-spacing:0.06em;text-transform:uppercase}
+.footer-links a:hover{opacity:0.8}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  nav{padding:14px 20px}
+  .page-wrap{grid-template-columns:1fr;padding:32px 20px;gap:0}
+  .sidebar{display:none}
+  .content{padding-left:0}
+  footer{padding:20px;flex-direction:column;text-align:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-badge">🌐</div>
+    FranceCraft
+  </a>
+  <a href="index.html" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Retour
+  </a>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Sur cette page</div>
+    <nav class="sidebar-nav" id="sideNav">
+      <a href="#mentions" class="active">Mentions légales</a>
+      <a href="#cgu">Conditions d'utilisation</a>
+      <a href="#confidentialite">Confidentialité</a>
+      <a href="#cookies">Cookies</a>
+      <a href="#dream-legal">Système Dream</a>
+      <a href="#contact-legal">Contact</a>
+    </nav>
+    <div class="sidebar-update">
+      <strong>Dernière mise à jour</strong>
+      30 mai 2026 — Version 1.0
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <div class="content-header">
+      <div class="content-eyebrow">Documents légaux</div>
+      <h1 class="content-title">Mentions légales<br><em>& conditions.</em></h1>
+      <p class="content-intro">Ces documents régissent l'utilisation du site FranceCraft, du serveur Minecraft et de tous les services associés. En utilisant FranceCraft, vous acceptez l'ensemble de ces conditions.</p>
+    </div>
+
+    <!-- MENTIONS LÉGALES -->
+    <div class="legal-section" id="mentions">
+      <div class="legal-section-tag">01</div>
+      <h2 class="legal-h2">Mentions légales</h2>
+
+      <h3 class="legal-h3">Éditeur du site</h3>
+      <p class="legal-p">Le site <strong>francecraft-dream.vercel.app</strong> est édité par le projet communautaire FranceCraft, projet non commercial à destination de la communauté francophone Minecraft.</p>
+
+      <h3 class="legal-h3">Hébergement</h3>
+      <div class="legal-box">
+        <strong>Hébergeur du site web</strong>
+        Vercel Inc. — 340 Pine Street, Suite 1200, San Francisco, CA 94104, USA<br>
+        <a href="https://vercel.com" style="color:var(--accent2)">vercel.com</a>
+      </div>
+      <div class="legal-box">
+        <strong>Hébergeur du serveur Minecraft</strong>
+        Serveur hébergé sur infrastructure dédiée.<br>
+        IP de connexion : 91.197.6.35:26493
+      </div>
+
+      <h3 class="legal-h3">Propriété intellectuelle</h3>
+      <p class="legal-p">Le nom FranceCraft, le logo, les visuels, les textes et l'ensemble des contenus présents sur ce site sont la propriété exclusive du projet FranceCraft. Toute reproduction est interdite sans autorisation écrite préalable.</p>
+      <p class="legal-p">Minecraft est une marque déposée de <strong>Mojang Studios / Microsoft</strong>. FranceCraft n'est pas affilié à Mojang Studios ni à Microsoft.</p>
+    </div>
+
+    <div class="legal-divider"></div>
+
+    <!-- CGU -->
+    <div class="legal-section" id="cgu">
+      <div class="legal-section-tag">02</div>
+      <h2 class="legal-h2">Conditions générales d'utilisation</h2>
+
+      <h3 class="legal-h3">Accès aux services</h3>
+      <p class="legal-p">L'accès au serveur FranceCraft et aux services associés est ouvert à toute personne âgée de <strong>13 ans minimum</strong>. En dessous de cet âge, l'accord parental est requis.</p>
+
+      <h3 class="legal-h3">Règles de comportement</h3>
+      <ul class="legal-ul">
+        <li>Le respect des autres joueurs est obligatoire en toutes circonstances.</li>
+        <li>Tout harcèlement, discours haineux, ou comportement discriminatoire entraîne un bannissement immédiat.</li>
+        <li>Le Roleplay doit rester dans le cadre défini par le règlement du serveur.</li>
+        <li>L'exploitation de bugs ou failles techniques est interdite et signalable au staff.</li>
+        <li>Les contenus illégaux ou portant atteinte aux droits de tiers sont strictement prohibés.</li>
+      </ul>
+
+      <h3 class="legal-h3">Comptes utilisateurs</h3>
+      <p class="legal-p">Chaque joueur est responsable de la sécurité de son compte. En cas de compromission, contactez le support immédiatement via Discord. Le partage de compte est interdit.</p>
+
+      <div class="legal-box warn">
+        <strong>⚠️ Sanctions</strong>
+        Le non-respect des CGU peut entraîner : avertissement, suspension temporaire ou bannissement définitif, selon la gravité. Les décisions du staff sont souveraines.
+      </div>
+
+      <h3 class="legal-h3">Modifications des CGU</h3>
+      <p class="legal-p">FranceCraft se réserve le droit de modifier ces conditions à tout moment. Les utilisateurs seront informés via Discord. La poursuite de l'utilisation des services après modification vaut acceptation.</p>
+    </div>
+
+    <div class="legal-divider"></div>
+
+    <!-- CONFIDENTIALITÉ -->
+    <div class="legal-section" id="confidentialite">
+      <div class="legal-section-tag">03</div>
+      <h2 class="legal-h2">Politique de confidentialité</h2>
+
+      <h3 class="legal-h3">Données collectées</h3>
+      <p class="legal-p">Dans le cadre de la création d'un compte, FranceCraft collecte les données suivantes :</p>
+      <ul class="legal-ul">
+        <li><strong>Adresse email</strong> — pour l'authentification et les communications importantes.</li>
+        <li><strong>Pseudo Minecraft</strong> — pour lier votre compte au serveur.</li>
+        <li><strong>Identifiant Discord</strong> — si connexion via Discord OAuth.</li>
+        <li><strong>Données de connexion</strong> — date et heure de connexion, adresse IP (à des fins de sécurité).</li>
+        <li><strong>Activité en jeu</strong> — statistiques RP, transactions économiques, progression.</li>
+      </ul>
+
+      <h3 class="legal-h3">Utilisation des données</h3>
+      <p class="legal-p">Vos données sont utilisées exclusivement pour :</p>
+      <ul class="legal-ul">
+        <li>Gérer votre compte et votre accès aux services FranceCraft.</li>
+        <li>Assurer la sécurité et prévenir les abus.</li>
+        <li>Vous envoyer des communications liées au projet (jamais de spam commercial).</li>
+        <li>Améliorer l'expérience de jeu via des statistiques anonymisées.</li>
+      </ul>
+
+      <h3 class="legal-h3">Stockage & sécurité</h3>
+      <div class="legal-box">
+        <strong>Infrastructure de données</strong>
+        Vos données sont stockées sur <strong>Supabase</strong> (infrastructure PostgreSQL sécurisée, hébergée sur AWS en Europe). Les mots de passe sont hashés avec bcrypt et ne sont jamais stockés en clair.
+      </div>
+
+      <h3 class="legal-h3">Partage des données</h3>
+      <p class="legal-p">FranceCraft <strong>ne vend jamais vos données</strong> à des tiers. Aucune donnée personnelle identifiable n'est partagée avec des partenaires commerciaux. Seuls les prestataires techniques nécessaires au fonctionnement (Supabase, Vercel) y ont accès, dans le cadre strict de leurs missions.</p>
+
+      <h3 class="legal-h3">Vos droits (RGPD)</h3>
+      <p class="legal-p">Conformément au RGPD, vous disposez des droits suivants :</p>
+      <ul class="legal-ul">
+        <li><strong>Droit d'accès</strong> — obtenir une copie de vos données.</li>
+        <li><strong>Droit de rectification</strong> — corriger vos données.</li>
+        <li><strong>Droit à l'effacement</strong> — demander la suppression de votre compte et données.</li>
+        <li><strong>Droit à la portabilité</strong> — recevoir vos données dans un format structuré.</li>
+        <li><strong>Droit d'opposition</strong> — vous opposer à certains traitements.</li>
+      </ul>
+      <p class="legal-p">Pour exercer ces droits, contactez-nous via Discord ou à l'adresse email du projet.</p>
+    </div>
+
+    <div class="legal-divider"></div>
+
+    <!-- COOKIES -->
+    <div class="legal-section" id="cookies">
+      <div class="legal-section-tag">04</div>
+      <h2 class="legal-h2">Politique de cookies</h2>
+
+      <h3 class="legal-h3">Cookies utilisés</h3>
+      <p class="legal-p">FranceCraft utilise un nombre minimal de cookies, strictement nécessaires au fonctionnement des services :</p>
+
+      <div class="legal-box">
+        <strong>Cookies essentiels (non désactivables)</strong>
+        Session d'authentification — maintient votre connexion active.<br>
+        Préférences de langue et d'interface.
+      </div>
+      <div class="legal-box">
+        <strong>Cookies fonctionnels (optionnels)</strong>
+        Supabase Auth Token — stockage sécurisé de votre session.<br>
+        Préférences d'affichage du site.
+      </div>
+
+      <h3 class="legal-h3">Ce que nous n'utilisons PAS</h3>
+      <ul class="legal-ul">
+        <li>Aucun cookie publicitaire ou de tracking marketing.</li>
+        <li>Aucun outil d'analyse comportementale tiers (pas de Google Analytics).</li>
+        <li>Aucun pixel de réseaux sociaux.</li>
+      </ul>
+
+      <p class="legal-p">Vous pouvez gérer les cookies via les paramètres de votre navigateur. La désactivation des cookies essentiels empêchera la connexion au compte.</p>
+    </div>
+
+    <div class="legal-divider"></div>
+
+    <!-- DREAM -->
+    <div class="legal-section" id="dream-legal">
+      <div class="legal-section-tag">05</div>
+      <h2 class="legal-h2">Système Dream — Conditions spécifiques</h2>
+
+      <h3 class="legal-h3">Nature des achats</h3>
+      <p class="legal-p">Les abonnements Dream sont des <strong>dons volontaires</strong> destinés à financer l'infrastructure et le développement du projet. En contrepartie, des avantages cosmétiques et communautaires sont accordés.</p>
+
+      <div class="legal-box warn">
+        <strong>⚠️ Important — Aucun remboursement garanti</strong>
+        Les achats Dream ne sont pas remboursables sauf obligation légale. En cas de fermeture du serveur, aucun remboursement ne peut être garanti. Vous contribuez au projet en connaissance de cause.
+      </div>
+
+      <h3 class="legal-h3">Anti pay-to-win</h3>
+      <p class="legal-p">FranceCraft s'engage à ce qu'aucun avantage Dream ne confère de supériorité compétitive déloyale en jeu. Les avantages sont exclusivement <strong>cosmétiques, communautaires et d'accès</strong>.</p>
+
+      <h3 class="legal-h3">DreamCoins</h3>
+      <p class="legal-p">Les DreamCoins sont une monnaie virtuelle interne sans valeur monétaire réelle. Ils ne peuvent pas être échangés contre de l'argent réel, ni transférés entre comptes.</p>
+
+      <h3 class="legal-h3">Résiliation</h3>
+      <p class="legal-p">Vous pouvez annuler votre abonnement Dream à tout moment. L'annulation prend effet à la fin de la période en cours. Les avantages restent actifs jusqu'à la fin de la période payée.</p>
+    </div>
+
+    <div class="legal-divider"></div>
+
+    <!-- CONTACT -->
+    <div class="legal-section" id="contact-legal">
+      <div class="legal-section-tag">06</div>
+      <h2 class="legal-h2">Contact & réclamations</h2>
+      <p class="legal-p">Pour toute question relative à ces documents, à vos données personnelles, ou pour exercer vos droits RGPD, contactez-nous :</p>
+
+      <div class="contact-card">
+        <div class="contact-card-title">Support FranceCraft</div>
+        <p>Le moyen le plus rapide de nous contacter est notre serveur Discord. Notre équipe répond généralement sous 24 à 48h.</p>
+        <a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener" class="contact-discord">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+          Contacter le support Discord
+        </a>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-copy">© 2026 FranceCraft — Tous droits réservés</div>
+  <div class="footer-links">
+    <a href="index.html">Accueil</a>
+    <a href="login.html">Connexion</a>
+    <a href="https://discord.gg/MHw87NrHxu" target="_blank">Discord</a>
+  </div>
+</footer>
+
+<script>
+// Active sidebar link on scroll
+const sections = document.querySelectorAll('.legal-section');
+const navLinks = document.querySelectorAll('.sidebar-nav a');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const link = document.querySelector(`.sidebar-nav a[href="#${entry.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.3, rootMargin: '-80px 0px -60% 0px' });
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
