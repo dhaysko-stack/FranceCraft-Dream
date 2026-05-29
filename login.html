@@ -187,11 +187,11 @@ footer{position:relative;z-index:1;padding:24px 48px;border-top:1px solid var(--
       <button class="tab-btn" id="tab-register" onclick="switchTab('register')">Créer un compte</button>
     </div>
 
-    <!-- DISCORD -->
-    <a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener" class="btn-discord">
+    <!-- DISCORD OAuth -->
+    <button onclick="loginWithDiscord()" class="btn-discord" id="btn-discord">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
-      Continuer avec Discord
-    </a>
+      <span id="discord-btn-text">Continuer avec Discord</span>
+    </button>
 
     <div class="sep">
       <div class="sep-line"></div>
@@ -288,7 +288,14 @@ footer{position:relative;z-index:1;padding:24px 48px;border-top:1px solid var(--
   </div>
 </footer>
 
-<script>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+// ── SUPABASE CONFIG ──
+const SUPABASE_URL = 'https://fhnedeopibnsbskvztop.supabase.co';
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZobmVkZW9waWJuc2Jza3Z6dG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5OTI4NDEsImV4cCI6MjA5NTU2ODg0MX0.atZKKWfvOYho_x_Pckr6w6kzUXActXvYDgdX1VQ0UrI';
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON);
+
 // ── CURSOR ──
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
@@ -306,8 +313,34 @@ animRing();
 document.addEventListener('mousedown',()=>{cursor.classList.add('click');ring.classList.add('click')});
 document.addEventListener('mouseup',()=>{cursor.classList.remove('click');ring.classList.remove('click')});
 
+// ── CHECK SESSION (si déjà connecté → rediriger) ──
+const { data: { session } } = await supabase.auth.getSession();
+if (session) {
+  window.location.href = 'index.html';
+}
+
+// ── DISCORD OAUTH ──
+window.loginWithDiscord = async function() {
+  const btn = document.getElementById('btn-discord');
+  const txt = document.getElementById('discord-btn-text');
+  btn.disabled = true;
+  txt.textContent = 'Redirection…';
+  const { error } = await supabase.auth.signInWithOAuth({
+    provider: 'discord',
+    options: {
+      redirectTo: window.location.origin + '/index.html',
+      scopes: 'identify email guilds'
+    }
+  });
+  if (error) {
+    showError('Erreur Discord : ' + error.message);
+    btn.disabled = false;
+    txt.textContent = 'Continuer avec Discord';
+  }
+};
+
 // ── TABS ──
-function switchTab(tab) {
+window.switchTab = function(tab) {
   const isLogin = tab === 'login';
   document.getElementById('tab-login').classList.toggle('active', isLogin);
   document.getElementById('tab-register').classList.toggle('active', !isLogin);
@@ -320,17 +353,17 @@ function switchTab(tab) {
     ? 'Connectez-vous pour accéder à votre espace joueur.'
     : 'Créez votre compte et rejoignez la communauté.';
   hideAlerts();
-}
+};
 
 // ── PASSWORD TOGGLE ──
-function togglePw(id, btn) {
+window.togglePw = function(id, btn) {
   const input = document.getElementById(id);
   const isHidden = input.type === 'password';
   input.type = isHidden ? 'text' : 'password';
   btn.querySelector('svg').innerHTML = isHidden
     ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
     : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
-}
+};
 
 // ── ALERTS ──
 function showSuccess(msg) {
@@ -338,37 +371,50 @@ function showSuccess(msg) {
   document.getElementById('alert-success').classList.add('show');
   document.getElementById('alert-error').classList.remove('show');
 }
-function showError(msg) {
+window.showError = function(msg) {
   document.getElementById('alert-error-msg').textContent = msg;
   document.getElementById('alert-error').classList.add('show');
   document.getElementById('alert-success').classList.remove('show');
-}
+};
 function hideAlerts() {
   document.getElementById('alert-success').classList.remove('show');
   document.getElementById('alert-error').classList.remove('show');
 }
+window.hideAlerts = hideAlerts;
 
-// ── LOGIN (frontend only — à brancher au backend) ──
-function handleLogin() {
+// ── LOGIN EMAIL ──
+window.handleLogin = async function() {
   hideAlerts();
   const email = document.getElementById('login-email').value.trim();
   const password = document.getElementById('login-password').value;
+
   if (!email || !email.includes('@')) {
-    document.getElementById('login-email').classList.add('error');
-    return;
+    document.getElementById('login-email').classList.add('error'); return;
   }
   document.getElementById('login-email').classList.remove('error');
-  if (password.length < 1) {
-    document.getElementById('login-password').classList.add('error');
-    return;
+  if (!password) {
+    document.getElementById('login-password').classList.add('error'); return;
   }
   document.getElementById('login-password').classList.remove('error');
-  // → ICI : appel API backend (Supabase, etc.)
-  showError('Connexion impossible — le backend n\'est pas encore configuré. Rejoins le Discord en attendant !');
-}
 
-// ── REGISTER (frontend only — à brancher au backend) ──
-function handleRegister() {
+  const btn = document.getElementById('btn-login');
+  btn.disabled = true;
+  btn.textContent = 'Connexion…';
+
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+  if (error) {
+    showError('Email ou mot de passe incorrect.');
+    btn.disabled = false;
+    btn.textContent = 'Se connecter';
+  } else {
+    showSuccess('Connexion réussie ! Redirection…');
+    setTimeout(() => window.location.href = 'index.html', 1200);
+  }
+};
+
+// ── REGISTER EMAIL ──
+window.handleRegister = async function() {
   hideAlerts();
   const username = document.getElementById('reg-username').value.trim();
   const email = document.getElementById('reg-email').value.trim();
@@ -393,28 +439,45 @@ function handleRegister() {
   if (password !== confirm) {
     document.getElementById('reg-confirm').classList.add('error');
     document.getElementById('confirm-error').style.display = 'block';
-    valid=false;
+    valid = false;
   } else {
     document.getElementById('reg-confirm').classList.remove('error');
     document.getElementById('confirm-error').style.display = 'none';
   }
 
-  if (!terms) {
-    showError('Vous devez accepter les CGU pour créer un compte.');
-    return;
-  }
-
+  if (!terms) { showError('Vous devez accepter les CGU.'); return; }
   if (!valid) return;
 
-  // → ICI : appel API backend (Supabase, etc.)
-  showError('Inscription impossible — le backend n\'est pas encore configuré. Rejoins le Discord en attendant !');
-}
+  const btn = document.getElementById('btn-register');
+  btn.disabled = true;
+  btn.textContent = 'Création…';
 
-// Enter key support
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: { username, minecraft_username: username }
+    }
+  });
+
+  if (error) {
+    showError(error.message === 'User already registered'
+      ? 'Un compte existe déjà avec cet email.'
+      : 'Erreur : ' + error.message);
+    btn.disabled = false;
+    btn.textContent = 'Créer mon compte';
+  } else {
+    showSuccess('Compte créé ! Vérifie ton email pour confirmer ton inscription.');
+    btn.disabled = false;
+    btn.textContent = 'Créer mon compte';
+  }
+};
+
+// ── ENTER KEY ──
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
-  if (document.getElementById('panel-login').classList.contains('active')) handleLogin();
-  else handleRegister();
+  if (document.getElementById('panel-login').classList.contains('active')) window.handleLogin();
+  else window.handleRegister();
 });
 </script>
 </body>
