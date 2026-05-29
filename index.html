@@ -255,21 +255,84 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
 @keyframes floatA{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
 @keyframes floatB{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-/* ── RESPONSIVE ── */
-@media(max-width:900px){
-  nav{padding:16px 24px}
+/* ── HAMBURGER MENU ── */
+.hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hamburger span{display:block;width:22px;height:2px;background:var(--muted);border-radius:2px;transition:all 0.3s}
+.hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:65px;left:0;right:0;bottom:0;background:rgba(9,11,16,0.98);backdrop-filter:blur(16px);z-index:99;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:40px 24px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-family:'Syne',sans-serif;font-weight:700;font-size:28px;color:var(--muted);text-decoration:none;letter-spacing:-0.01em;padding:12px 0;transition:color 0.2s;width:100%;text-align:center;border-bottom:1px solid var(--border)}
+.mobile-menu a:hover{color:var(--text)}
+.mobile-menu a:last-child{border:none}
+.mobile-menu-actions{display:flex;gap:12px;margin-top:24px;width:100%}
+.mobile-menu-actions a{flex:1;text-align:center;padding:14px;border-radius:8px;text-decoration:none;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.06em;text-transform:uppercase;transition:all 0.2s}
+
+/* ── RESPONSIVE TABLET ── */
+@media(max-width:1024px){
+  .dream-cards{grid-template-columns:1fr 1fr}
+  .dream-card.featured{grid-column:1/-1}
+  .units-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ── RESPONSIVE MOBILE ── */
+@media(max-width:768px){
+  /* nav */
+  nav{padding:14px 20px}
   .nav-links{display:none}
-  section{padding:60px 24px}
-  .pillars-grid{grid-template-columns:1fr}
-  .dream-cards{grid-template-columns:1fr}
-  .vocal-inner{grid-template-columns:1fr}
+  .nav-cta{display:none}
+  .hamburger{display:flex}
+
+  /* hero */
+  .hero{padding:100px 20px 60px;min-height:auto}
+  .hero-glow{width:300px;height:300px}
+  .hero-eyebrow{font-size:10px;padding:5px 12px}
+  .hero-desc{font-size:13px;padding:0 8px}
+  .hero-actions{flex-direction:column;width:100%;gap:10px}
+  .btn-hero,.btn-ghost{width:100%;text-align:center;padding:16px 24px}
+  .server-status{flex-direction:column;gap:10px;width:100%;align-items:stretch}
+  .status-card{justify-content:center}
+  .stats-strip{gap:32px;margin-top:48px}
+  .stat-number{font-size:26px}
+
+  /* sections */
+  section{padding:50px 20px}
+  .section-title{font-size:clamp(26px,7vw,40px)}
+  .why-section{padding:50px 0}
+  .why-header{padding:0 20px;margin-bottom:32px}
+  .why-card{flex:0 0 280px}
+  .why-scroll-hint{padding:0 20px}
+
+  /* pillars */
+  .pillars-grid{grid-template-columns:1fr;gap:2px}
+
+  /* vocal */
+  .vocal-section{padding:50px 20px}
+  .vocal-inner{grid-template-columns:1fr;gap:40px}
   .vocal-visual{display:none}
-  .units-grid{grid-template-columns:1fr 1fr}
-  .cta-section,.dream-section,.vocal-section,.emergency-section{padding:60px 24px}
-  .why-section{padding:60px 0}
-  .footer-top{grid-template-columns:1fr 1fr;gap:32px;padding:0 24px 40px}
-  footer{padding:40px 24px 24px}
-  .footer-bottom{padding:0 24px;flex-direction:column;text-align:center}
+
+  /* urgences */
+  .emergency-section{padding:50px 20px}
+  .units-grid{grid-template-columns:1fr;gap:10px}
+
+  /* dream */
+  .dream-section{padding:50px 20px}
+  .dream-cards{grid-template-columns:1fr;gap:12px}
+  .dream-card{padding:28px 24px}
+  .dream-price{font-size:28px}
+
+  /* cta */
+  .cta-section{padding:80px 20px}
+  .cta-actions{flex-direction:column;width:100%}
+  .cta-actions a{text-align:center}
+
+  /* footer */
+  footer{padding:40px 20px 20px}
+  .footer-top{grid-template-columns:1fr;gap:36px;padding:0 0 36px}
+  .footer-bottom{padding:0;flex-direction:column;text-align:center;gap:12px}
+  .footer-legal{justify-content:center}
+
   body{cursor:auto}
   .cursor,.cursor-ring{display:none}
 }
@@ -283,8 +346,8 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
 
 <!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo">
-    <div class="logo-badge">🇫🇷</div>
+  <a href="index.html" class="nav-logo">
+    <div class="logo-badge">🌐</div>
     FranceCraft
   </a>
   <ul class="nav-links">
@@ -298,7 +361,23 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
     <a href="login.html" class="btn-outline">Connexion</a>
     <a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener" class="btn-primary">Rejoindre</a>
   </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#pourquoi" onclick="closeMenu()">Pourquoi FC</a>
+  <a href="#pilliers" onclick="closeMenu()">Fonctionnalités</a>
+  <a href="#vocal" onclick="closeMenu()">Vocal</a>
+  <a href="#urgences" onclick="Services" onclick="closeMenu()">Services</a>
+  <a href="#dream" onclick="closeMenu()">Dream</a>
+  <div class="mobile-menu-actions">
+    <a href="login.html" style="background:var(--card);border:1px solid var(--border);color:var(--muted)">Connexion</a>
+    <a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener" style="background:var(--accent);color:#fff">Rejoindre</a>
+  </div>
+</div>
 
 <!-- TICKER -->
 <div class="ticker-section">
@@ -700,14 +779,28 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
       Tous les systèmes opérationnels
     </div>
     <div class="footer-legal">
-      <a href="#">CGU</a>
-      <a href="#">Confidentialité</a>
-      <a href="#">Cookies</a>
+      <a href="legal.html">CGU</a>
+      <a href="legal.html#confidentialite">Confidentialité</a>
+      <a href="legal.html#cookies">Cookies</a>
     </div>
   </div>
 </footer>
 
 <script>
+// ── HAMBURGER ──
+function toggleMenu(){
+  const h=document.getElementById('hamburger');
+  const m=document.getElementById('mobileMenu');
+  h.classList.toggle('open');
+  m.classList.toggle('open');
+  document.body.style.overflow=m.classList.contains('open')?'hidden':'';
+}
+function closeMenu(){
+  document.getElementById('hamburger').classList.remove('open');
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.body.style.overflow='';
+}
+
 // ── CURSOR ──
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
