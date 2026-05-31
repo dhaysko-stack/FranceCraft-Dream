@@ -547,8 +547,12 @@ window.showPanel = function(name) {
 // ── SERVER STATUS LIVE ──
 async function fetchServer() {
   try {
-    const r = await fetch('https://api.mcsrvstat.us/3/91.197.6.35:26493');
-    const d = await r.json();
+    // Try v3 then v2
+    let d = null;
+    for (const url of ['https://api.mcsrvstat.us/3/91.197.6.35:26493','https://api.mcsrvstat.us/2/91.197.6.35:26493']) {
+      try { const r2 = await fetch(url,{cache:'no-store'}); if(r2.ok){d=await r2.json();break;} } catch(e){}
+    }
+    if(!d) return;
     const online = d.online;
     const players = d.players?.online ?? 0;
     const max = d.players?.max ?? '—';
