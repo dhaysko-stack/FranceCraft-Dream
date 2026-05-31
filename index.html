@@ -618,7 +618,7 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
             <div class="vocal-feat-desc">Infrastructure cloud optimisée. Pas de lag, pas de coupure — juste l'immersion.</div>
           </div>
         </div>
-        <a href="https://francecraftrp-voice.fr/vocal" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;margin-top:8px;padding:13px 24px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);border-radius:10px;color:var(--accent2);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.2s" onmouseover="this.style.background='rgba(59,130,246,0.18)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(59,130,246,0.1)';this.style.transform='none'">
+        <a href="https://francecraftrp-voice.fr/#platforms" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;margin-top:8px;padding:13px 24px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);border-radius:10px;color:var(--accent2);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.2s" onmouseover="this.style.background='rgba(59,130,246,0.18)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(59,130,246,0.1)';this.style.transform='none'">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
           Accéder au système vocal →
         </a>
@@ -704,7 +704,7 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
           <li>Badge profil animé sur l'appli</li>
           <li>Support prioritaire</li>
         </ul>
-        <a href="#dream" class="dream-cta">Commencer Dream Élite →</a>
+        <a href="dream-store.html" class="dream-cta">Commencer Dream Élite →</a>
       </div>
       <div class="dream-card small">
         <div>
@@ -717,7 +717,7 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
             <li>Accès cosmétiques mensuels</li>
           </ul>
         </div>
-        <a href="#dream" class="dream-cta">Choisir Dream+</a>
+        <a href="dream-store.html" class="dream-cta">Choisir Dream+</a>
       </div>
       <div class="dream-card small">
         <div>
@@ -730,7 +730,7 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
             <li>Rôle Partenaire officiel</li>
           </ul>
         </div>
-        <a href="#dream" class="dream-cta">Choisir Dream Pro</a>
+        <a href="dream-store.html" class="dream-cta">Choisir Dream Pro</a>
       </div>
     </div>
   </div>
@@ -803,7 +803,7 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
       <div class="footer-col-title">Projet</div>
       <ul>
         <li><a href="#pourquoi">À propos <span class="arrow">→</span></a></li>
-        <li><a href="#dream">Store Dream <span class="arrow">→</span></a></li>
+        <li><a href="dream-store.html">Store Dream <span class="arrow">→</span></a></li>
         <li><a href="partenaires.html">Partenariats <span class="arrow">→</span></a></li>
         <li><a href="https://discord.com/channels/1455315366535499788/1455379345278504991" target="_blank" rel="noopener">Support <span class="arrow">→</span></a></li>
         <li><a href="legal.html">Mentions légales <span class="arrow">→</span></a></li>
@@ -974,8 +974,8 @@ track.addEventListener('scroll', updateDots, { passive: true });
 updateDots();
 
 // ── SERVEUR MINECRAFT LIVE ──
-const MC_IP = '91.197.6.35';
-const MC_PORT = '26493';
+const MC_ADDR = '91.197.6.35:26493';
+const MC_UA = 'FranceCraft-Website/1.0 (francecraft-dream.vercel.app)';
 
 async function fetchServerStatus() {
   const dotEl = document.getElementById('status-dot-online');
@@ -986,48 +986,61 @@ async function fetchServerStatus() {
   const maxEl = document.getElementById('player-max');
   const footerBadge = document.querySelector('.footer-status-badge');
 
-  // Try v3 first, fallback to v2
-  const endpoints = [
-    `https://api.mcsrvstat.us/3/${MC_IP}:${MC_PORT}`,
-    `https://api.mcsrvstat.us/2/${MC_IP}:${MC_PORT}`
-  ];
+  let isOnline = false, playersOnline = 0, playersMax = '—';
 
-  let data = null;
-  for (const url of endpoints) {
+  // 1. mcstatus.io (no CORS issues, works with custom ports)
+  try {
+    const r = await fetch(`https://api.mcstatus.io/v2/status/java/${MC_ADDR}`, {
+      cache: 'no-store',
+      headers: { 'User-Agent': MC_UA }
+    });
+    if (r.ok) {
+      const d = await r.json();
+      isOnline = d.online === true;
+      playersOnline = d.players?.online ?? 0;
+      playersMax = d.players?.max ?? '—';
+    }
+  } catch(e) {}
+
+  // 2. mcsrvstat simple endpoint (200=online, 404=offline) — fallback
+  if (!isOnline) {
     try {
-      const res = await fetch(url, { cache: 'no-store' });
-      if (res.ok) { data = await res.json(); break; }
-    } catch(e) { continue; }
+      const r2 = await fetch(`https://api.mcsrvstat.us/simple/${MC_ADDR}`, {
+        cache: 'no-store',
+        headers: { 'User-Agent': MC_UA }
+      });
+      if (r2.status === 200) {
+        isOnline = true;
+        // Get player count from full endpoint
+        try {
+          const r3 = await fetch(`https://api.mcsrvstat.us/3/${MC_ADDR}`, {
+            cache: 'no-store',
+            headers: { 'User-Agent': MC_UA }
+          });
+          if (r3.ok) {
+            const d3 = await r3.json();
+            playersOnline = d3.players?.online ?? 0;
+            playersMax = d3.players?.max ?? '—';
+          }
+        } catch(e) {}
+      }
+    } catch(e) {}
   }
-
-  if (!data) {
-    valEl.textContent = 'Vérification…';
-    lblEl.textContent = '';
-    return;
-  }
-
-  // mcsrvstat returns online:true OR ip field present with players
-  const isOnline = data.online === true || (data.ip && data.players !== undefined);
 
   if (isOnline) {
-    dotEl.style.background = 'var(--green)';
-    dotEl.style.boxShadow = '0 0 8px rgba(34,197,94,0.5)';
-    dotEl.style.animation = 'pulse 2s infinite';
+    dotEl.style.cssText = 'background:var(--green);box-shadow:0 0 8px rgba(34,197,94,0.5);animation:pulse 2s infinite;width:8px;height:8px;border-radius:50%;flex-shrink:0';
     valEl.textContent = 'En ligne';
     lblEl.textContent = '— Serveur principal';
-    const online = data.players?.online ?? 0;
-    const max = data.players?.max ?? '—';
     if (playersCard) playersCard.style.display = 'flex';
-    if (countEl) countEl.textContent = online;
-    if (maxEl) maxEl.textContent = max;
-    if (footerBadge) footerBadge.innerHTML = `<span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span> Serveur en ligne — ${online} joueur${online!==1?'s':''}`;
+    if (countEl) countEl.textContent = playersOnline;
+    if (maxEl) maxEl.textContent = playersMax;
+    if (footerBadge) footerBadge.innerHTML = `<span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span>&nbsp;Serveur en ligne — ${playersOnline} joueur${playersOnline !== 1 ? 's' : ''}`;
   } else {
-    dotEl.style.background = 'var(--red)';
-    dotEl.style.boxShadow = 'none';
-    dotEl.style.animation = 'none';
+    dotEl.style.cssText = 'background:var(--red);box-shadow:none;animation:none;width:8px;height:8px;border-radius:50%;flex-shrink:0';
     valEl.textContent = 'Hors ligne';
     lblEl.textContent = '— Serveur principal';
-    if (footerBadge) footerBadge.innerHTML = `<span style="width:6px;height:6px;background:var(--red);border-radius:50%;display:inline-block"></span> Serveur hors ligne`;
+    if (playersCard) playersCard.style.display = 'none';
+    if (footerBadge) footerBadge.innerHTML = `<span style="width:6px;height:6px;background:var(--red);border-radius:50%;display:inline-block"></span>&nbsp;Serveur hors ligne`;
   }
 }
 fetchServerStatus();
