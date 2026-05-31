@@ -990,7 +990,7 @@ async function fetchServerStatus() {
 
   // 1. mcstatus.io (no CORS issues, works with custom ports)
   try {
-    const r = await fetch(`https://api.mcstatus.io/v2/status/java/${MC_ADDR}`, {
+    const r = await fetch(`https://api.mcstatus.io/v2/status/bedrock/${MC_ADDR}`, {
       cache: 'no-store',
       headers: { 'User-Agent': MC_UA }
     });
