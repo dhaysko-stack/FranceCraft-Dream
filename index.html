@@ -973,9 +973,10 @@ wrap.addEventListener('touchmove', e => {
 track.addEventListener('scroll', updateDots, { passive: true });
 updateDots();
 
-// ── SERVEUR MINECRAFT LIVE (mcsrvstat.us) ──
+// ── SERVEUR MINECRAFT LIVE ──
 const MC_IP = '91.197.6.35';
 const MC_PORT = '26493';
+
 async function fetchServerStatus() {
   const dotEl = document.getElementById('status-dot-online');
   const valEl = document.getElementById('status-online-val');
@@ -984,35 +985,53 @@ async function fetchServerStatus() {
   const countEl = document.getElementById('player-count');
   const maxEl = document.getElementById('player-max');
   const footerBadge = document.querySelector('.footer-status-badge');
-  try {
-    const res = await fetch(`https://api.mcsrvstat.us/3/${MC_IP}:${MC_PORT}`);
-    const data = await res.json();
-    if (data.online) {
-      dotEl.style.background = 'var(--green)';
-      dotEl.style.boxShadow = '0 0 8px rgba(34,197,94,0.5)';
-      dotEl.style.animation = 'pulse 2s infinite';
-      valEl.textContent = 'En ligne';
-      lblEl.textContent = '— Serveur principal';
-      if (data.players) {
-        playersCard.style.display = 'flex';
-        countEl.textContent = data.players.online ?? '0';
-        maxEl.textContent = data.players.max ?? '—';
-      }
-      if (footerBadge) footerBadge.innerHTML = `<span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span> Serveur en ligne`;
-    } else {
-      dotEl.style.background = 'var(--red)';
-      dotEl.style.boxShadow = 'none';
-      valEl.textContent = 'Hors ligne';
-      lblEl.textContent = '— Serveur principal';
-      if (footerBadge) footerBadge.innerHTML = `<span style="width:6px;height:6px;background:var(--red);border-radius:50%;display:inline-block"></span> Serveur hors ligne`;
-    }
-  } catch(err) {
-    valEl.textContent = 'Statut inconnu';
+
+  // Try v3 first, fallback to v2
+  const endpoints = [
+    `https://api.mcsrvstat.us/3/${MC_IP}:${MC_PORT}`,
+    `https://api.mcsrvstat.us/2/${MC_IP}:${MC_PORT}`
+  ];
+
+  let data = null;
+  for (const url of endpoints) {
+    try {
+      const res = await fetch(url, { cache: 'no-store' });
+      if (res.ok) { data = await res.json(); break; }
+    } catch(e) { continue; }
+  }
+
+  if (!data) {
+    valEl.textContent = 'Vérification…';
     lblEl.textContent = '';
+    return;
+  }
+
+  // mcsrvstat returns online:true OR ip field present with players
+  const isOnline = data.online === true || (data.ip && data.players !== undefined);
+
+  if (isOnline) {
+    dotEl.style.background = 'var(--green)';
+    dotEl.style.boxShadow = '0 0 8px rgba(34,197,94,0.5)';
+    dotEl.style.animation = 'pulse 2s infinite';
+    valEl.textContent = 'En ligne';
+    lblEl.textContent = '— Serveur principal';
+    const online = data.players?.online ?? 0;
+    const max = data.players?.max ?? '—';
+    if (playersCard) playersCard.style.display = 'flex';
+    if (countEl) countEl.textContent = online;
+    if (maxEl) maxEl.textContent = max;
+    if (footerBadge) footerBadge.innerHTML = `<span style="width:6px;height:6px;background:var(--green);border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span> Serveur en ligne — ${online} joueur${online!==1?'s':''}`;
+  } else {
+    dotEl.style.background = 'var(--red)';
+    dotEl.style.boxShadow = 'none';
+    dotEl.style.animation = 'none';
+    valEl.textContent = 'Hors ligne';
+    lblEl.textContent = '— Serveur principal';
+    if (footerBadge) footerBadge.innerHTML = `<span style="width:6px;height:6px;background:var(--red);border-radius:50%;display:inline-block"></span> Serveur hors ligne`;
   }
 }
 fetchServerStatus();
-setInterval(fetchServerStatus, 60000); // refresh toutes les 60s
+setInterval(fetchServerStatus, 60000);
 
 
 // ── AUTH NAV ──
