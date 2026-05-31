@@ -340,6 +340,30 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
   body{cursor:auto}
   .cursor,.cursor-ring{display:none}
 }
+
+/* ── ENHANCED ANIMATIONS ── */
+.why-card{transition:border-color 0.35s,transform 0.35s,box-shadow 0.35s}
+.why-card:hover{box-shadow:0 20px 48px rgba(0,0,0,0.35)}
+.unit-card:hover{border-color:rgba(255,255,255,0.12)}
+.dream-card.featured::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 40%,rgba(245,158,11,0.04) 50%,transparent 60%);background-size:200% 200%;animation:shimmer 4s ease-in-out infinite;pointer-events:none}
+@keyframes shimmer{0%,100%{background-position:200% 200%}50%{background-position:0% 0%}}
+.vocal-feat{transition:border-color 0.25s,background 0.25s,transform 0.25s}
+.vocal-feat:hover{transform:translateX(4px)}
+.hero-particle{position:absolute;width:2px;height:2px;background:var(--accent);border-radius:50%;opacity:0;pointer-events:none;animation:particleFloat var(--dur,6s) var(--delay,0s) ease-in-out infinite}
+@keyframes particleFloat{0%{opacity:0;transform:translateY(0) scale(0)}20%{opacity:0.6}80%{opacity:0.2}100%{opacity:0;transform:translateY(-120px) translateX(var(--dx,20px)) scale(0.5)}}
+.nav-user-wrap{position:relative}
+.nav-user-btn{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;background:var(--card);border:1px solid var(--border);border-radius:100px;cursor:pointer;transition:all 0.2s;text-decoration:none}
+.nav-user-btn:hover{border-color:rgba(255,255,255,0.15);background:#141a24}
+.nav-user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#7c3aed);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff;font-weight:700}
+.nav-user-avatar img{width:100%;height:100%;object-fit:cover}
+.nav-user-name{font-size:12px;color:var(--text);max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:8px;min-width:180px;opacity:0;pointer-events:none;transform:translateY(-8px);transition:all 0.2s;z-index:200;box-shadow:0 16px 40px rgba(0,0,0,0.4)}
+.nav-user-wrap:hover .nav-user-dropdown{opacity:1;pointer-events:all;transform:none}
+.nav-dropdown-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:var(--muted);text-decoration:none;font-size:12px;transition:all 0.15s;cursor:pointer;border:none;background:none;width:100%;text-align:left}
+.nav-dropdown-item:hover{background:rgba(255,255,255,0.04);color:var(--text)}
+.nav-dropdown-item.logout:hover{color:var(--red);background:rgba(239,68,68,0.06)}
+.nav-dropdown-sep{height:1px;background:var(--border);margin:4px 0}
+
 </style>
 </head>
 <body>
@@ -361,8 +385,8 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
     <li><a href="#urgences">Services</a></li>
     <li><a href="#dream">Dream</a></li>
   </ul>
-  <div class="nav-cta">
-    <a href="login.html" class="btn-outline">Connexion</a>
+  <div class="nav-cta" id="navCta">
+    <a href="login.html" class="btn-outline" id="navLoginBtn">Connexion</a>
     <a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener" class="btn-primary">Rejoindre</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -389,7 +413,7 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
     <span class="ticker-item"><span class="ticker-sep">●</span> Serveur en ligne</span>
     <span class="ticker-item"><span class="ticker-sep">●</span> Vocal temps réel actif</span>
     <span class="ticker-item"><span class="ticker-sep">●</span> Nouveau quartier ouvert</span>
-    <span class="ticker-item"><span class="ticker-sep">●</span> 847 joueurs actifs ce mois</span>
+    
     <span class="ticker-item"><span class="ticker-sep">●</span> Mise à jour économie v2.4</span>
     <span class="ticker-item"><span class="ticker-sep">●</span> Recrutement SAMU ouvert</span>
     <span class="ticker-item"><span class="ticker-sep">●</span> Dream Saison 3 disponible</span>
@@ -594,6 +618,10 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
             <div class="vocal-feat-desc">Infrastructure cloud optimisée. Pas de lag, pas de coupure — juste l'immersion.</div>
           </div>
         </div>
+        <a href="https://francecraftrp-voice.fr/#platforms" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;margin-top:8px;padding:13px 24px;background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.25);border-radius:10px;color:var(--accent2);font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;transition:all 0.2s" onmouseover="this.style.background='rgba(59,130,246,0.18)';this.style.transform='translateY(-2px)'" onmouseout="this.style.background='rgba(59,130,246,0.1)';this.style.transform='none'">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+          Accéder au système vocal →
+        </a>
       </div>
     </div>
     <div class="vocal-visual reveal-right">
@@ -752,11 +780,11 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
     <div class="footer-col">
       <div class="footer-col-title">Jouer</div>
       <ul>
-        <li><a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener">Rejoindre le serveur <span class="arrow">→</span></a></li>
-        <li><a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener">Comment se connecter <span class="arrow">→</span></a></li>
-        <li><a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener">Règlement du serveur <span class="arrow">→</span></a></li>
-        <li><a href="#pilliers">Liste des métiers <span class="arrow">→</span></a></li>
-        <li><a href="#pilliers">Carte de la ville <span class="arrow">→</span></a></li>
+        <li><a href="https://discord.com/channels/1455315366535499788/1502199315873927329" target="_blank" rel="noopener">Rejoindre le serveur <span class="arrow">→</span></a></li>
+        <li><a href="https://discord.com/channels/1455315366535499788/1496697664438407239" target="_blank" rel="noopener">Comment se connecter <span class="arrow">→</span></a></li>
+        <li><a href="https://francecraftrp-voice.fr/reglement" target="_blank" rel="noopener">Règlement du serveur <span class="arrow">→</span></a></li>
+        <li><a href="wip.html">Liste des métiers <span class="arrow">→</span></a></li>
+        <li><a href="wip.html">Cartes des villes <span class="arrow">→</span></a></li>
       </ul>
     </div>
 
@@ -764,10 +792,10 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
       <div class="footer-col-title">Communauté</div>
       <ul>
         <li><a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener">Discord officiel <span class="arrow">→</span></a></li>
-        <li><a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener">Forum <span class="arrow">→</span></a></li>
-        <li><a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener">Recrutements <span class="arrow">→</span></a></li>
-        <li><a href="#pilliers">Événements <span class="arrow">→</span></a></li>
-        <li><a href="#pilliers">Classements <span class="arrow">→</span></a></li>
+        <li><a href="wip.html">Forum <span class="arrow">→</span></a></li>
+        <li><a href="https://discord.com/channels/1455315366535499788/1504584252149465098" target="_blank" rel="noopener">Recrutements <span class="arrow">→</span></a></li>
+        <li><a href="https://francecraftfrp-app.base44.app/Events" target="_blank" rel="noopener">Événements <span class="arrow">→</span></a></li>
+        <li><a href="https://francecraftfrp-app.base44.app/Community" target="_blank" rel="noopener">Classements <span class="arrow">→</span></a></li>
       </ul>
     </div>
 
@@ -776,9 +804,9 @@ footer{border-top:1px solid var(--border);padding:64px 48px 32px}
       <ul>
         <li><a href="#pourquoi">À propos <span class="arrow">→</span></a></li>
         <li><a href="#dream">Store Dream <span class="arrow">→</span></a></li>
-        <li><a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener">Partenariats <span class="arrow">→</span></a></li>
-        <li><a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener">Support <span class="arrow">→</span></a></li>
-        <li><a href="#">Mentions légales <span class="arrow">→</span></a></li>
+        <li><a href="partenaires.html">Partenariats <span class="arrow">→</span></a></li>
+        <li><a href="https://discord.com/channels/1455315366535499788/1455379345278504991" target="_blank" rel="noopener">Support <span class="arrow">→</span></a></li>
+        <li><a href="legal.html">Mentions légales <span class="arrow">→</span></a></li>
       </ul>
     </div>
   </div>
@@ -985,6 +1013,59 @@ async function fetchServerStatus() {
 }
 fetchServerStatus();
 setInterval(fetchServerStatus, 60000); // refresh toutes les 60s
+
+
+// ── AUTH NAV ──
+(async () => {
+  try {
+    const { createClient } = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm');
+    const sb = createClient('https://fhnedeopibnsbskvztop.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZobmVkZW9waWJuc2Jza3Z6dG9wIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5OTI4NDEsImV4cCI6MjA5NTU2ODg0MX0.atZKKWfvOYho_x_Pckr6w6kzUXActXvYDgdX1VQ0UrI');
+    const { data: { session } } = await sb.auth.getSession();
+    if (session) {
+      const meta = session.user.user_metadata || {};
+      const name = meta.full_name || meta.name || session.user.email?.split('@')[0] || 'Joueur';
+      const avatar = meta.avatar_url || null;
+      const cta = document.getElementById('navCta');
+      if (!cta) return;
+      cta.innerHTML = `
+        <div class="nav-user-wrap">
+          <a href="dashboard.html" class="nav-user-btn">
+            <div class="nav-user-avatar">${avatar ? '<img src="'+avatar+'" alt="av">' : (name[0]?.toUpperCase()||'?')}</div>
+            <span class="nav-user-name">${name}</span>
+          </a>
+          <div class="nav-user-dropdown">
+            <a href="dashboard.html" class="nav-dropdown-item">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+              Mon dashboard
+            </a>
+            <div class="nav-dropdown-sep"></div>
+            <button class="nav-dropdown-item logout" id="navLogout">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Se déconnecter
+            </button>
+          </div>
+        </div>
+        <a href="https://discord.gg/MHw87NrHxu" target="_blank" rel="noopener" class="btn-primary">Rejoindre</a>
+      `;
+      document.getElementById('navLogout')?.addEventListener('click', async () => {
+        await sb.auth.signOut(); window.location.reload();
+      });
+    }
+  } catch(e) { console.log('Auth:', e); }
+})();
+
+// ── HERO PARTICLES ──
+(function(){
+  const hero = document.querySelector('.hero');
+  if(!hero) return;
+  for(let i=0;i<16;i++){
+    const p = document.createElement('div');
+    p.className='hero-particle';
+    const isGold = Math.random()>0.6;
+    p.style.cssText=`left:${8+Math.random()*84}%;bottom:${Math.random()*70}%;--dur:${5+Math.random()*9}s;--delay:${Math.random()*7}s;--dx:${(Math.random()-0.5)*60}px${isGold?';background:var(--dream)':''}`;
+    hero.appendChild(p);
+  }
+})();
 
 // ── PARALLAX HERO GLOW ──
 document.addEventListener('mousemove', e => {
